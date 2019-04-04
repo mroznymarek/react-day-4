@@ -9,20 +9,20 @@ import Results from './Results'
 const List = (props) => (
     <div>
         {
-            props.props.isError ?
+            props.isError ?
                 <Error />
                 :
-                props.props.isLoading ?
+                props.isLoading ?
                     <Loading />
                     :
-                    !props.props.users ?
+                    !props.users ?
                         <NotLoaded />
                         :
-                        props.props.users.length === 0 ?
+                        props.users.length === 0 ?
                             <NoUsers />
                             :
                             <Results
-                                data={props.props.users}
+                                data={props.users}
                             />
         }
     </div>

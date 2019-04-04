@@ -9,6 +9,7 @@ class Users extends React.Component {
         users: null,
         isLoading: false,
         isError: false,
+        searchTerm: ''
     }
 
     componentDidMount() {
@@ -21,12 +22,34 @@ class Users extends React.Component {
             .finally(() => this.setState({ isLoading: false }))
     }
 
+    onSearchTermChange = event => this.setState ({
+        searchTerm: event.target.value
+    }) 
+
     render() {
+        const filteredUsers = (
+            this.state.users &&
+            this.state.users.filter &&
+            this.state.users.filter (
+                user => {
+                    const name = (user.name.first + user.name.last).toLowerCase()
+                    const searchTerm = this.state.searchTerm.toLowerCase()
+                    const searchTermWithoutSpaces = searchTerm.replace(/ /g, '')
+                    const searchTermWithoutDiacritics = searchTermWithoutSpaces.normalize('NFD').replace(/[\u0300-\u036f]/g, "")
+
+                    return name.includes(searchTermWithoutDiacritics)
+                }
+            )
+        )
+
         return (
             <div>
-                <Search />
+                <Search 
+                searchTerm={this.state.searchTerm}
+                onSearchTermChange={this.onSearchTermChange}
+                />
                 <List
-                    users={this.state.users}
+                    users={filteredUsers}
                     isLoading={this.state.isLoading}
                     isError={this.state.isError}
                 />
